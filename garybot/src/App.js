@@ -26,6 +26,21 @@ function App() {
   const [formValues, setFormValues] = useState(initialFormValues)
   const [formErrors, setFormErrors] = useState(initialFormErrors)
 
+
+  const postNewUser = newUser => {
+
+    axios.post('https://reqres.in/api/users', newUser)
+      .then(response => {
+        setUsers(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+      .finally(() => {
+        setFormValues(initialFormValues)
+      })
+  }
+
   const onInputChange = (event) => {
     const { name, value } = event.target
 
@@ -73,11 +88,11 @@ function App() {
       terms: formValues.terms
     }
 
-    setUsers({
-      ...users,
-      newUser
-    })
+    postNewUser(newUser)
+
+    console.log(newUser)
   }
+
 
   return (
     <div className="App">
