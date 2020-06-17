@@ -2,10 +2,25 @@ import React from 'react'
 
 const Form = (props) => {
 
-  const { onInputChange, onCheckBoxChange, onSubmit, values } = props
+  const {
+    onInputChange,
+    onCheckBoxChange,
+    onSubmit,
+    values,
+    errors,
+  } = props
 
   return (
-    <form onSubmit={onSubmit}>
+    <form
+      onSubmit={onSubmit}
+    >
+
+      <div>
+        <p>{errors.name}</p>
+        <p>{errors.email}</p>
+        <p>{errors.password}</p>
+        <p>{errors.terms}</p>
+      </div>
 
       <input
         type='text'
@@ -21,6 +36,7 @@ const Form = (props) => {
         placeholder='Email'
         onChange={onInputChange}
         value={values.email}
+
       />
 
       <input
