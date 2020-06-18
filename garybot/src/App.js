@@ -13,7 +13,6 @@ function App() {
     name: '',
     email: '',
     password: '',
-
     terms: false,
   }
 
@@ -24,26 +23,19 @@ function App() {
     terms: '',
   }
 
+  const initialDisabled = true
+
   const [users, setUsers] = useState([])
   const [formValues, setFormValues] = useState(initialFormValues)
   const [formErrors, setFormErrors] = useState(initialFormErrors)
-
-  const getUsers = () => {
-    axios.get('https://reqres.in/api/users')
-      .then(response => {
-        setUsers(response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
+  const [disabled, setDisabled] = useState(initialDisabled)
 
 
   const postNewUser = newUser => {
 
     axios.post('https://reqres.in/api/users', newUser)
       .then(response => {
-        setUsers([...users, response.data])
+        setUsers([response.data, ...users])
       })
       .catch(error => {
         console.log(error)
@@ -83,6 +75,24 @@ function App() {
   const onCheckBoxChange = (event) => {
     const { name, checked } = event.target
 
+    Yup
+      .reach(formValidation, name)
+      .validate(checked)
+
+      .then(() => {
+        setFormErrors({
+          ...formErrors,
+          [name]: ''
+        })
+      })
+
+      .catch(error => {
+        setFormErrors({
+          ...formErrors,
+          [name]: error.errors[0]
+        });
+      });
+
     setFormValues({
       ...formValues,
       [name]: checked
@@ -103,10 +113,14 @@ function App() {
     postNewUser(newUser)
   }
 
-  // useEffect(() => {
-  //   getUsers()
-  // }, []);
-
+  useEffect(() => {
+    /* We pass the entire state into the entire schema, no need to use reach here.
+    We want to make sure it is all valid before we allow a user to submit
+    isValid comes from Yup directly */
+    formValidation.isValid(formValues).then(valid => {
+      setDisabled(!valid);
+    });
+  }, [formValues]);
 
   return (
     <div className="App">
@@ -116,6 +130,7 @@ function App() {
         onSubmit={onSubmit}
         values={formValues}
         errors={formErrors}
+        disabled={disabled}
       />
 
       {

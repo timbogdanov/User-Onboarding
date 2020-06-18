@@ -8,11 +8,13 @@ const Form = (props) => {
     onSubmit,
     values,
     errors,
+    disabled,
   } = props
 
   return (
     <form
       onSubmit={onSubmit}
+      id='submitForm'
     >
 
       <div>
@@ -26,6 +28,7 @@ const Form = (props) => {
         type='text'
         name='name'
         placeholder='Name'
+        id='name'
         onChange={onInputChange}
         value={values.name}
       />
@@ -33,6 +36,7 @@ const Form = (props) => {
       <input
         type='text'
         name='email'
+        id='email'
         placeholder='Email'
         onChange={onInputChange}
         value={values.email}
@@ -42,6 +46,7 @@ const Form = (props) => {
       <input
         type='password'
         name='password'
+        id='password'
         placeholder='Password'
         onChange={onInputChange}
         value={values.password}
@@ -58,6 +63,8 @@ const Form = (props) => {
 
       <input
         type='submit'
+        disabled={disabled}
+        id='submitBtn'
       />
     </form>
   )

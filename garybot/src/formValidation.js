@@ -12,6 +12,9 @@ const formValidation = Yup.object().shape({
   password: Yup
     .string()
     .required("Password is required."),
+  terms: Yup
+    .boolean()
+    .oneOf([true], 'You must agree to Terms of Service')
 });
 
 export default formValidation
